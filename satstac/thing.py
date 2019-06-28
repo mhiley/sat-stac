@@ -77,7 +77,11 @@ class Thing(object):
         if self.filename is not None:
             _links = []
             for l in links:
-                if os.path.isabs(l) or l[0:4] == 'http':
+                # mhiley: also handle s3:// urls here,
+                #         otherwise self urls to s3:// locations will get broken
+                #         (For requester pays buckets, important that url is
+                #         s3:// and not https://)
+                if os.path.isabs(l) or l[0:4] == 'http' or l.startswith('s3://'):
                     # if absolute or https 
                     link = l 
                 else:
